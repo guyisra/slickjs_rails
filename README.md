@@ -17,30 +17,28 @@ Or install it yourself as:
 
 ## Usage
 
-    add to js manifests
+add to js manifests
     
     //= require slick
     
-    and to css manifest
+and to css manifest
     
     *= require slick
     
 Note: This plugin has custom fonts for dots and arrows and such. These are provided in /fonts (from the original     repo) and are referred in the css.
     
-    If you want them make sure the asset pipeline will handle them with something like
+If you want them make sure the asset pipeline will handle them with something like
     
     config.assets.precompile += %w( .js .css *.css.scss .svg .eot .woff .ttf)
     
-    if you don't want them - ignore what I just wrote, and overwrite
+if you don't want them - ignore what I just wrote, and overwrite
     .slick-prev:before
     .slick-next:before
     .slick-dots li a:before 
 
 
 
-see instruction and full info in 
-
-    https://github.com/kenwheeler/slick
+see instruction and full info in https://github.com/kenwheeler/slick
 
 ## Contributing
 
