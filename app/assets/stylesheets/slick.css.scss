@@ -25,7 +25,7 @@
     }
 
     .slick-loading & {
-        background: #fff url(./ajax-loader.gif) center center no-repeat;
+        background: #fff image-url("ajax-loader.gif") center center no-repeat;
     }
 
     &.dragging {
@@ -75,7 +75,7 @@
     display: none;
 
     &.loading {
-        background: url(./ajax-loader.gif) center center no-repeat;
+        background: image-url("ajax-loader.gif") center center no-repeat;
         position: relative;
     }
 
@@ -101,8 +101,8 @@
  @charset"UTF-8";
  @font-face {
     font-family:"slick";
-    src:url("./fonts/slick.eot");
-    src:url("./fonts/slick.eot?#iefix") format("embedded-opentype"), url("./fonts/slick.woff") format("woff"), url("./fonts/slick.ttf") format("truetype"), url("./fonts/slick.svg#slick") format("svg");
+    src:font-url("slick.eot");
+    src:font-url("slick.eot?#iefix") format("embedded-opentype"), font-url("slick.woff") format("woff"), font-url("slick.ttf") format("truetype"), font-url("slick.svg#slick") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -117,12 +117,15 @@
     width: 20px;
     line-height: 0;
     font-size: 0;
+    cursor: pointer;
+    background: transparent;
     color: transparent;
     top: 50%;
     margin-top: -10px;
     padding: 0;
+    border: none;
     &:focus {
-        outline: none
+        outline: none;
     }
     &.slick-disabled:before {
         opacity: 0.25;
