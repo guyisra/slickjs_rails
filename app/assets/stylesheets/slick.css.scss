@@ -1,3 +1,16 @@
+@charset "UTF-8";
+
+// Default Variables
+
+//$slick-font-path: "./fonts/" !default;
+//$slick-loader-path: "./" !default;
+$slick-arrow-color: white !default;
+$slick-dot-color: black !default;
+$slick-prev-character: '\2190' !default;
+$slick-next-character: '\2192' !default;
+$slick-dot-character: '\2022' !default;
+
+
 /* Slider */
 
 .slick-slider {
@@ -27,7 +40,7 @@
     }
 
     .slick-loading & {
-        background: #fff url(./ajax-loader.gif) center center no-repeat;
+        background: #fff image-url("ajax-loader.gif") center center no-repeat;
     }
 
     &.dragging {
@@ -72,10 +85,9 @@
     min-height: 1px;
     img {
         display: block;
-        &.slick-loading {
-            background: white url(./ajax-loader.gif) center center no-repeat;
-            padding-bottom: 100%;
-        }
+    }
+    &.slick-loading img {
+        display: none;
     }
 
     display: none;
@@ -101,14 +113,13 @@
 
 /* Icons */
 
- @charset"UTF-8";
- @font-face {
+@font-face {
     font-family:"slick";
-    src: asset-url("slick.eot");
-    src: asset-url("slick.eot?#iefix") format("embedded-opentype"),
-     asset-url("slick.woff") format("woff"),
-      asset-url("slick.ttf") format("truetype"), 
-      asset-url("slick.svg#slick") format("svg");
+    src:    font-url("slick.eot");
+    src:    font-url("slick.eot?#iefix") format("embedded-opentype"),
+            font-url("slick.woff") format("woff"),
+            font-url("slick.ttf") format("truetype"),
+            font-url("slick.svg#slick") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -142,7 +153,7 @@
     font-family:"slick";
     font-size: 20px;
     line-height: 1;
-    color: white;
+    color: $slick-arrow-color;
     opacity: 0.85;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -150,13 +161,13 @@
 .slick-prev {
     left: -25px;
     &:before {
-        content:'\8592';
+        content: $slick-prev-character;
     }
 }
 .slick-next {
     right: -25px;
     &:before {
-        content:'\8594';
+        content: $slick-next-character;
     }
 }
 
@@ -204,14 +215,14 @@
                 position: absolute;
                 top: 0;
                 left: 0;
-                content:'\8226';
+                content: $slick-dot-character;
                 width: 20px;
                 height: 20px;
                 font-family:"slick";
                 font-size: 6px;
                 line-height: 20px;
                 text-align: center;
-                color: black;
+                color: $slick-dot-color;
                 opacity: 0.25;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
