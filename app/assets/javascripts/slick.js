@@ -587,7 +587,7 @@
         _.$list.off('.slick');
         $(window).off('.slick-' + _.instanceUid);
         $(document).off('.slick-' + _.instanceUid);
-
+        
     };
 
     Slick.prototype.disableTransition = function(slide) {
@@ -1130,11 +1130,11 @@
         if(_.options.vertical === false) {
             _.slideWidth = Math.ceil(_.listWidth / _.options.slidesToShow);
             _.$slideTrack.width(Math.ceil((_.slideWidth * _.$slideTrack.children('.slick-slide').length)));
-
+        
         } else {
             _.slideWidth = Math.ceil(_.listWidth);
             _.$slideTrack.height(Math.ceil((_.$slides.first().outerHeight(true) * _.$slideTrack.children('.slick-slide').length)));
-
+        
         }
 
         var offset = _.$slides.first().outerWidth(true) - _.$slides.first().width();
