@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 1.3.8
+ Version: 1.3.11
   Author: Ken Wheeler
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -619,7 +619,7 @@
 
     };
 
-    Slick.prototype.fadeSlide = function(slideIndex, callback) {
+    Slick.prototype.fadeSlide = function(oldSlide, slideIndex, callback) {
 
         var _ = this;
 
@@ -633,19 +633,29 @@
                 opacity: 1
             }, _.options.speed, _.options.easing, callback);
 
+            _.$slides.eq(oldSlide).animate({
+                opacity: 0
+            }, _.options.speed, _.options.easing);
+
         } else {
 
             _.applyTransition(slideIndex);
+            _.applyTransition(oldSlide);
 
             _.$slides.eq(slideIndex).css({
                 opacity: 1,
                 zIndex: 1000
             });
 
+            _.$slides.eq(oldSlide).css({
+                opacity: 0
+            });
+
             if (callback) {
                 setTimeout(function() {
 
                     _.disableTransition(slideIndex);
+                    _.disableTransition(oldSlide);
 
                     callback.call();
                 }, _.options.speed);
@@ -717,9 +727,6 @@
             if (_.slideCount > _.options.slidesToShow) {
                 _.slideOffset = (_.slideWidth * _.options.slidesToShow) * -1;
                 verticalOffset = (verticalHeight * _.options.slidesToShow) * -1;
-            } else {
-                _.slideOffset = 0;
-                verticalOffset = 0;
             }
             if (_.slideCount % _.options.slidesToScroll !== 0) {
                 if (slideIndex + _.options.slidesToScroll > _.slideCount && _.slideCount > _.options.slidesToShow) {
@@ -736,6 +743,11 @@
             }
         }
 
+        if (_.slideCount <= _.options.slidesToShow){
+            _.slideOffset = 0;
+            verticalOffset = 0;
+        }
+
         if (_.options.centerMode === true && _.options.infinite === true) {
             _.slideOffset += _.slideWidth * Math.floor(_.options.slidesToShow / 2) - _.slideWidth;
         } else if (_.options.centerMode === true) {
@@ -749,11 +761,20 @@
         }
 
         if (_.options.variableWidth === true) {
-            targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex + _.options.slidesToShow);
-            targetLeft = targetSlide[0].offsetLeft * -1;
+
+            if(_.slideCount <= _.options.slidesToShow || _.options.infinite === false) {
+                targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex);
+            } else {
+                targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex + _.options.slidesToShow);
+            }
+            targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
             if (_.options.centerMode === true) {
-                targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex + _.options.slidesToShow + 1);
-                targetLeft = targetSlide[0].offsetLeft * -1;
+                if(_.options.infinite === false) {
+                    targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex);
+                } else {
+                    targetSlide = _.$slideTrack.children('.slick-slide').eq(slideIndex + _.options.slidesToShow + 1);
+                }
+                targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
                 targetLeft += (_.$list.width() - targetSlide.outerWidth()) / 2;
             }
         }
@@ -1057,6 +1078,10 @@
             _.currentSlide = _.currentSlide - _.options.slidesToScroll;
         }
 
+        if (_.slideCount <= _.options.slidesToShow) {
+            _.currentSlide = 0;
+        }
+
         _.setProps();
 
         _.setupInfinite();
@@ -1176,9 +1201,9 @@
         } else if (_.options.variableWidth === true) {
             _.slideWidth = 0;
             _.$slideTrack.children('.slick-slide').each(function(){
-                _.slideWidth += $(this).outerWidth();
+                _.slideWidth += Math.ceil($(this).outerWidth(true));
             });
-            _.$slideTrack.width(Math.ceil(_.slideWidth));
+            _.$slideTrack.width(Math.ceil(_.slideWidth) + 1);
         } else {
             _.slideWidth = Math.ceil(_.listWidth);
             _.$slideTrack.height(Math.ceil((_.$slides.first().outerHeight(true) * _.$slideTrack.children('.slick-slide').length)));
@@ -1408,7 +1433,7 @@
 
     Slick.prototype.slideHandler = function(index,sync) {
 
-        var targetSlide, animSlide, slideLeft, unevenOffset, targetLeft = null,
+        var targetSlide, animSlide, oldSlide, slideLeft, unevenOffset, targetLeft = null,
             _ = this;
 
         sync = sync || false;
@@ -1473,6 +1498,7 @@
             _.options.onBeforeChange.call(this, _, _.currentSlide, animSlide);
         }
 
+        oldSlide = _.currentSlide;
         _.currentSlide = animSlide;
 
         _.setSlideClasses(_.currentSlide);
@@ -1481,7 +1507,7 @@
         _.updateArrows();
 
         if (_.options.fade === true) {
-            _.fadeSlide(animSlide, function() {
+            _.fadeSlide(oldSlide,animSlide, function() {
                 _.postSlide(animSlide);
             });
             return false;
@@ -1798,7 +1824,7 @@
             element.slick.changeSlide({
                 data: {
                     message: 'index',
-                    index: slide
+                    index: parseInt(slide)
                 }
             });
 
