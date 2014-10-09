@@ -1,3 +1,3 @@
 module SlickRails
-  VERSION = "1.3.7.1"
+  VERSION = "1.3.11"
 end
