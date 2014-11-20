@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 1.3.14
+ Version: 1.3.15
   Author: Ken Wheeler
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -583,7 +583,7 @@
 
                 navigables = _.getNavigableIndexes();
                 prevNavigable = 0;
-                if(navigables.indexOf(index) === -1) {
+                if(navigables[index] && navigables[index] === index) {
                     if(index > navigables[navigables.length -1]){
                         index = navigables[navigables.length -1];
                     } else {
