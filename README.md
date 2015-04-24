@@ -43,6 +43,7 @@ If you want them make sure the asset pipeline will handle them with something li
     config.assets.precompile += %w( .js .css *.css.scss .svg .eot .woff .ttf)
 
 if you don't want them - ignore what I just wrote, and overwrite
+
     .slick-prev:before
     .slick-next:before
     .slick-dots li a:before
