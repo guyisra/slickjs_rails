@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 1.5.3
+ Version: 1.5.5
   Author: Ken Wheeler
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -494,7 +494,9 @@
         _.slideCount = _.$slides.length;
 
         _.$slides.each(function(index, element) {
-            $(element).attr('data-slick-index', index);
+            $(element)
+                .attr('data-slick-index', index)
+                .data('originalStyling', $(element).attr('style') || '');
         });
 
         _.$slidesCache = _.$slides;
@@ -564,8 +566,10 @@
             };
             _.$slider.html(newSlides);
             _.$slider.children().children().children()
-                .width((100 / _.options.slidesPerRow) + "%")
-                .css({'display': 'inline-block'});
+                .css({
+                    'width':(100 / _.options.slidesPerRow) + "%",
+                    'display': 'inline-block'
+                });
         };
 
     };
@@ -805,7 +809,7 @@
 
     };
 
-    Slick.prototype.destroy = function() {
+    Slick.prototype.destroy = function(refresh) {
 
         var _ = this;
 
@@ -828,16 +832,13 @@
         }
 
         if (_.$slides) {
-            _.$slides.removeClass('slick-slide slick-active slick-center slick-visible')
+
+            _.$slides
+                .removeClass('slick-slide slick-active slick-center slick-visible')
                 .removeAttr('aria-hidden')
                 .removeAttr('data-slick-index')
-                .css({
-                    position: '',
-                    left: '',
-                    top: '',
-                    zIndex: '',
-                    opacity: '',
-                    width: ''
+                .each(function(){
+                    $(this).attr('style', $(this).data('originalStyling'));
                 });
 
             _.$slideTrack.children(this.options.slide).detach();
@@ -855,6 +856,10 @@
         _.$slider.removeClass('slick-initialized');
 
         _.unslicked = true;
+
+        if(!refresh) {
+            _.$slider.trigger('destroy', [_]);
+        }
 
     };
 
@@ -1450,7 +1455,7 @@
         var _ = this,
             currentSlide = _.currentSlide;
 
-        _.destroy();
+        _.destroy(true);
 
         $.extend(_, _.initials);
 
